@@ -69,13 +69,13 @@ export function BridgeTest() {
       prefill={{
                   chainId: 11155420, 
                      token: 'USDC',
-                       amount: '0.001',
+                       amount: '1',
                      recipient: '0x0754241982730db1ecf4a2c5e7839c1467f13c5e',
                 }}
->
+             >
            {({ onClick, isLoading }) => (
            <button onClick={onClick} disabled={isLoading}>
-            {isLoading ? 'Sending…' : 'Send 0.001 USDC'}
+            {isLoading ? 'Sending…' : 'Send 1 USDC'}
           </button>
             )}
         </TransferButton>
