@@ -49,7 +49,7 @@ export function BridgeTest() {
 
       <BridgeButton
         prefill={{
-          chainId: 421614, // Arbitrum mainnet instead of Sepolia
+          chainId: 421614, 
           token: 'USDC',
           amount: '0.001', 
         }}
@@ -81,7 +81,7 @@ export function BridgeTest() {
         </TransferButton>
 
        <BridgeAndExecuteButton
-          contractAddress="0x6Ae43d3271ff6888e7Fc43Fd7321a503ff738951"
+          contractAddress="0xBfC91D59fdAA134A4ED45f7B584cAf96D7792Eff"
           contractAbi={
         [
         {
