@@ -12,7 +12,7 @@ export function BridgeTest() {
   const { isConnected } = useAccount();
   const { isSdkInitialized, sdk } = useNexus();
 
-  // Debug: Log available tokens and contract addresses
+
   React.useEffect(() => {
     if (sdk && isSdkInitialized) {
       console.log('Available TOKEN_METADATA:', TOKEN_METADATA);
@@ -45,11 +45,11 @@ export function BridgeTest() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-4 p-4">
-      <h1 className="text-2xl font-bold">Test Cross-Chain Bridge</h1>
+      <h1 className="text-2xl font-bold">Nexus SDK</h1>
 
       <BridgeButton
         prefill={{
-          chainId: 421614, 
+          chainId: 421614, // Arbitrum Sepolia ( any chain u want)
           token: 'USDC',
           amount: '0.001', 
         }}
@@ -67,21 +67,22 @@ export function BridgeTest() {
 
       <TransferButton
       prefill={{
-                  chainId: 11155420, 
+                  chainId: 11155420, // optimism sepolia ( as of now this transfer is working on optimism sepolia) 
                      token: 'USDC',
                        amount: '1',
-                     recipient: '0x0754241982730db1ecf4a2c5e7839c1467f13c5e',
+                     recipient: '0x0754241982730db1ecf4a2c5e7839c1467f13c5e', //add your recipient address here
                 }}
              >
            {({ onClick, isLoading }) => (
-           <button onClick={onClick} disabled={isLoading}>
+           <button onClick={onClick} disabled={isLoading}
+           className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
             {isLoading ? 'Sending…' : 'Send 1 USDC'}
           </button>
             )}
         </TransferButton>
 
        <BridgeAndExecuteButton
-          contractAddress="0xBfC91D59fdAA134A4ED45f7B584cAf96D7792Eff"
+          contractAddress="0xBfC91D59fdAA134A4ED45f7B584cAf96D7792Eff" //aave pool address on arbitrum sepolia ( you can change it to other chain address as well by checking aave docs)
           contractAbi={
         [
         {
@@ -110,7 +111,8 @@ export function BridgeTest() {
   prefill={{ toChainId: 421614, token: 'USDC' }}
 >
   {({ onClick, isLoading, disabled }) => (
-    <button onClick={onClick} disabled={isLoading || disabled}>
+    <button onClick={onClick} disabled={isLoading || disabled}
+    className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
       {isLoading ? 'Processing…' : 'Bridge & Supply to Aave'}
     </button>
   )}

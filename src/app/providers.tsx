@@ -17,7 +17,7 @@ const config = createConfig(
       [arbitrumSepolia.id]: http(),
       [optimism.id]: http(),
     },
-    walletConnectProjectId: '7a6e6a1f7934519391a590f1b17504df', 
+    walletConnectProjectId: 'Add your wallet id here from walletconnect.com', 
     appName: 'Nexus Test',
   })
 );
