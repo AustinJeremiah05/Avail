@@ -1,8 +1,10 @@
 'use client';
 
-import { BridgeButton } from '@avail-project/nexus-widgets';
+import { BridgeButton,BridgeAndExecuteButton, TOKEN_METADATA,TOKEN_CONTRACT_ADDRESSES  } from '@avail-project/nexus-widgets';
 import { ConnectKitButton } from 'connectkit';
 import { useAccount } from 'wagmi';
+import { parseUnits } from 'viem';
+import { NexusProvider } from '@avail-project/nexus-widgets';
 
 export function BridgeTest() {
   const { isConnected } = useAccount();
@@ -37,6 +39,41 @@ export function BridgeTest() {
           </button>
         )}
       </BridgeButton>
+       <BridgeAndExecuteButton
+          contractAddress="0x794a61358D6845594F94dc1DB02A252b5b4814aD"
+          contractAbi={
+        [
+        {
+        name: 'supply',
+        type: 'function',
+        stateMutability: 'nonpayable',
+        inputs: [
+          { name: 'asset', type: 'address' },
+          { name: 'amount', type: 'uint256' },
+          { name: 'onBehalfOf', type: 'address' },
+          { name: 'referralCode', type: 'uint16' },
+        ],
+        outputs: [],
+      },
+    ] as const
+  }
+  functionName="supply"
+  buildFunctionParams={(token, amount, chainId, userAddress) => {
+    const decimals = TOKEN_METADATA[token].decimals;
+    const amountWei = parseUnits(amount, decimals);
+    const tokenAddress = TOKEN_CONTRACT_ADDRESSES[token][chainId];
+    return {
+      functionParams: [tokenAddress, amountWei, userAddress, 0],
+    };
+  }}
+  prefill={{ toChainId: 1, token: 'USDC' }}
+>
+  {({ onClick, isLoading, disabled }) => (
+    <button onClick={onClick} disabled={isLoading || disabled}>
+      {isLoading ? 'Processing…' : 'Bridge & Supply to Aave'}
+    </button>
+  )}
+      </BridgeAndExecuteButton>
 
       <p className="text-sm text-gray-600">
         This will bridge USDC from your current chain to Arbitrum Sepolia testnet
