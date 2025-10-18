@@ -1,13 +1,27 @@
 'use client';
 
-import { BridgeButton,BridgeAndExecuteButton, TOKEN_METADATA,TOKEN_CONTRACT_ADDRESSES  } from '@avail-project/nexus-widgets';
+import React from 'react';
+import { BridgeButton,BridgeAndExecuteButton, TransferButton, TOKEN_METADATA,TOKEN_CONTRACT_ADDRESSES  } from '@avail-project/nexus-widgets';
 import { ConnectKitButton } from 'connectkit';
 import { useAccount } from 'wagmi';
 import { parseUnits } from 'viem';
-import { NexusProvider } from '@avail-project/nexus-widgets';
+import { useNexus } from '@avail-project/nexus-widgets';
+
 
 export function BridgeTest() {
   const { isConnected } = useAccount();
+  const { isSdkInitialized, sdk } = useNexus();
+
+  // Debug: Log available tokens and contract addresses
+  React.useEffect(() => {
+    if (sdk && isSdkInitialized) {
+      console.log('Available TOKEN_METADATA:', TOKEN_METADATA);
+      console.log('Available TOKEN_CONTRACT_ADDRESSES:', TOKEN_CONTRACT_ADDRESSES);
+      console.log('USDC on Arbitrum (42161):', TOKEN_CONTRACT_ADDRESSES['USDC']?.[42161]);
+      console.log('ETH on Arbitrum (42161):', TOKEN_CONTRACT_ADDRESSES['ETH']?.[42161]);
+      console.log('Available tokens:', Object.keys(TOKEN_METADATA));
+    }
+  }, [sdk, isSdkInitialized]);
 
   if (!isConnected) {
     return (
@@ -17,16 +31,27 @@ export function BridgeTest() {
     );
   }
 
+  if (!isSdkInitialized) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Initializing Nexus SDK...</p>
+          <p className="text-sm text-gray-500 mt-2">Please wait while we set up the cross-chain bridge</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-4 p-4">
       <h1 className="text-2xl font-bold">Test Cross-Chain Bridge</h1>
-      
-      
+
       <BridgeButton
         prefill={{
-          chainId: 421614, // Arbitrum Sepolia (testnet)
+          chainId: 421614, // Arbitrum mainnet instead of Sepolia
           token: 'USDC',
-          amount: '1', // 1 USDC
+          amount: '0.001', 
         }}
       >
         {({ onClick, isLoading }) => (
@@ -35,12 +60,28 @@ export function BridgeTest() {
             disabled={isLoading}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
-            {isLoading ? 'Bridging...' : 'Bridge 1 USDC to Arbitrum Sepolia'}
+            {isLoading ? 'Bridging...' : 'Bridge 0.001 USDC to Arbitrum Sepolia'}
           </button>
         )}
       </BridgeButton>
+
+      <TransferButton
+      prefill={{
+                  chainId: 11155420, 
+                     token: 'USDC',
+                       amount: '0.001',
+                     recipient: '0x0754241982730db1ecf4a2c5e7839c1467f13c5e',
+                }}
+>
+           {({ onClick, isLoading }) => (
+           <button onClick={onClick} disabled={isLoading}>
+            {isLoading ? 'Sending…' : 'Send 0.001 USDC'}
+          </button>
+            )}
+        </TransferButton>
+
        <BridgeAndExecuteButton
-          contractAddress="0x794a61358D6845594F94dc1DB02A252b5b4814aD"
+          contractAddress="0x6Ae43d3271ff6888e7Fc43Fd7321a503ff738951"
           contractAbi={
         [
         {
@@ -66,7 +107,7 @@ export function BridgeTest() {
       functionParams: [tokenAddress, amountWei, userAddress, 0],
     };
   }}
-  prefill={{ toChainId: 1, token: 'USDC' }}
+  prefill={{ toChainId: 421614, token: 'USDC' }}
 >
   {({ onClick, isLoading, disabled }) => (
     <button onClick={onClick} disabled={isLoading || disabled}>
@@ -74,10 +115,6 @@ export function BridgeTest() {
     </button>
   )}
       </BridgeAndExecuteButton>
-
-      <p className="text-sm text-gray-600">
-        This will bridge USDC from your current chain to Arbitrum Sepolia testnet
-      </p>
     </div>
   );
-}
+}	
