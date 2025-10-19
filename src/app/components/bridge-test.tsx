@@ -49,9 +49,9 @@ export function BridgeTest() {
 
       <BridgeButton
         prefill={{
-          chainId: 421614, // Arbitrum Sepolia ( any chain u want)
+          chainId: 421614,
           token: 'USDC',
-          amount: '0.001', 
+          amount: '1', 
         }}
       >
         {({ onClick, isLoading }) => (
@@ -60,17 +60,17 @@ export function BridgeTest() {
             disabled={isLoading}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
-            {isLoading ? 'Bridging...' : 'Bridge 0.001 USDC to Arbitrum Sepolia'}
+            {isLoading ? 'Bridging...' : 'Bridge 1 USDC to Arbitrum Sepolia'}
           </button>
         )}
       </BridgeButton>
 
       <TransferButton
       prefill={{
-                  chainId: 11155420, // optimism sepolia ( as of now this transfer is working on optimism sepolia) 
+                  chainId: 11155420, 
                      token: 'USDC',
                        amount: '1',
-                     recipient: '0x0754241982730db1ecf4a2c5e7839c1467f13c5e', //add your recipient address here
+                     recipient: '0x0754241982730db1ecf4a2c5e7839c1467f13c5e', 
                 }}
              >
            {({ onClick, isLoading }) => (
@@ -82,7 +82,7 @@ export function BridgeTest() {
         </TransferButton>
 
        <BridgeAndExecuteButton
-          contractAddress="0xBfC91D59fdAA134A4ED45f7B584cAf96D7792Eff" //aave pool address on arbitrum sepolia ( you can change it to other chain address as well by checking aave docs)
+          contractAddress="0xBfC91D59fdAA134A4ED45f7B584cAf96D7792Eff" 
           contractAbi={
         [
         {

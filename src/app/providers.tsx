@@ -17,7 +17,7 @@ const config = createConfig(
       [arbitrumSepolia.id]: http(),
       [optimism.id]: http(),
     },
-    walletConnectProjectId: 'Add your wallet id here from walletconnect.com', 
+    walletConnectProjectId: '7a6e6a1f7934519391a590f1b17504df', 
     appName: 'Nexus Test',
   })
 );
@@ -26,7 +26,7 @@ const queryClient = new QueryClient();
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <WagmiProvider config={config}>
+    <WagmiProvider config={config} reconnectOnMount={false}>
       <QueryClientProvider client={queryClient}>
         <ConnectKitProvider>
           <NexusProvider

@@ -43,7 +43,7 @@ export function WalletBridge() {
     };
 
     initializeNexus();
-  }, [isConnected, connector, isSdkInitialized, isInitializing, setProvider, initializeSdk]);
+  }, [isConnected, connector, isSdkInitialized, setProvider, initializeSdk]);
 
   if (isInitializing) {
     return (
