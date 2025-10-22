@@ -15,7 +15,7 @@ export function WalletBridge() {
         try {
           setIsInitializing(true);
           console.log('Getting wallet provider...');
-          const provider = await connector.getProvider();
+          const provider = await connector.getProvider() as any;
           console.log('Provider obtained:', provider);
           
          
@@ -31,11 +31,15 @@ export function WalletBridge() {
           console.log('Nexus SDK initialized successfully');
         } catch (error) {
           console.error('Failed to initialize Nexus SDK:', error);
-          console.error('Error details:', {
-            message: error.message,
-            stack: error.stack,
-            name: error.name
-          });
+          if (error && typeof error === 'object') {
+            console.error('Error details:', {
+              message: (error as { message?: string }).message,
+              stack: (error as { stack?: string }).stack,
+              name: (error as { name?: string }).name
+            });
+          } else {
+            console.error('Error details:', error);
+          }
         } finally {
           setIsInitializing(false);
         }

@@ -47,24 +47,6 @@ export function BridgeTest() {
     <div className="flex flex-col items-center justify-center min-h-screen gap-4 p-4">
       <h1 className="text-2xl font-bold">Nexus SDK</h1>
 
-      <BridgeButton
-        prefill={{
-          chainId: 421614,
-          token: 'USDC',
-          amount: '1', 
-        }}
-      >
-        {({ onClick, isLoading }) => (
-          <button
-            onClick={onClick}
-            disabled={isLoading}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-          >
-            {isLoading ? 'Bridging...' : 'Bridge 1 USDC to Arbitrum Sepolia'}
-          </button>
-        )}
-      </BridgeButton>
-
       <TransferButton
       prefill={{
                   chainId: 11155420, 
