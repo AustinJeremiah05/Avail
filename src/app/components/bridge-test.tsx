@@ -1,17 +1,15 @@
 'use client';
 
 import React from 'react';
-import { BridgeButton,BridgeAndExecuteButton, TransferButton, TOKEN_METADATA,TOKEN_CONTRACT_ADDRESSES  } from '@avail-project/nexus-widgets';
+import { BridgeAndExecuteButton, TransferButton, TOKEN_METADATA, TOKEN_CONTRACT_ADDRESSES } from '@avail-project/nexus-widgets';
 import { ConnectKitButton } from 'connectkit';
 import { useAccount } from 'wagmi';
 import { parseUnits } from 'viem';
 import { useNexus } from '@avail-project/nexus-widgets';
 
-
 export function BridgeTest() {
   const { isConnected } = useAccount();
   const { isSdkInitialized, sdk } = useNexus();
-
 
   React.useEffect(() => {
     if (sdk && isSdkInitialized) {
@@ -48,57 +46,63 @@ export function BridgeTest() {
       <h1 className="text-2xl font-bold">Nexus SDK</h1>
 
       <TransferButton
-      prefill={{
-                  chainId: 11155420, 
-                     token: 'USDC',
-                       amount: '1',
-                     recipient: '0x0754241982730db1ecf4a2c5e7839c1467f13c5e', 
-                }}
-             >
-           {({ onClick, isLoading }) => (
-           <button onClick={onClick} disabled={isLoading}
-           className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
+        prefill={{
+          chainId: 11155420,
+          token: 'USDC',
+          amount: '1',
+          recipient: '0x0754241982730db1ecf4a2c5e7839c1467f13c5e',
+        }}
+      >
+        {({ onClick, isLoading }) => (
+          <button
+            onClick={onClick}
+            disabled={isLoading}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+          >
             {isLoading ? 'Sending…' : 'Send 1 USDC'}
           </button>
-            )}
-        </TransferButton>
+        )}
+      </TransferButton>
 
-       <BridgeAndExecuteButton
-          contractAddress="0xBfC91D59fdAA134A4ED45f7B584cAf96D7792Eff" 
-          contractAbi={
-        [
-        {
-        name: 'supply',
-        type: 'function',
-        stateMutability: 'nonpayable',
-        inputs: [
-          { name: 'asset', type: 'address' },
-          { name: 'amount', type: 'uint256' },
-          { name: 'onBehalfOf', type: 'address' },
-          { name: 'referralCode', type: 'uint16' },
-        ],
-        outputs: [],
-      },
-    ] as const
-  }
-  functionName="supply"
-  buildFunctionParams={(token, amount, chainId, userAddress) => {
-    const decimals = TOKEN_METADATA[token].decimals;
-    const amountWei = parseUnits(amount, decimals);
-    const tokenAddress = TOKEN_CONTRACT_ADDRESSES[token][chainId];
-    return {
-      functionParams: [tokenAddress, amountWei, userAddress, 0],
-    };
-  }}
-  prefill={{ toChainId: 421614, token: 'USDC' }}
->
-  {({ onClick, isLoading, disabled }) => (
-    <button onClick={onClick} disabled={isLoading || disabled}
-    className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
-      {isLoading ? 'Processing…' : 'Bridge & Supply to Aave'}
-    </button>
-  )}
+      <BridgeAndExecuteButton
+        contractAddress="0xBfC91D59fdAA134A4ED45f7B584cAf96D7792Eff"
+        contractAbi={
+          [
+            {
+              name: 'supply',
+              type: 'function',
+              stateMutability: 'nonpayable',
+              inputs: [
+                { name: 'asset', type: 'address' },
+                { name: 'amount', type: 'uint256' },
+                { name: 'onBehalfOf', type: 'address' },
+                { name: 'referralCode', type: 'uint16' },
+              ],
+              outputs: [],
+            },
+          ] as const
+        }
+        functionName="supply"
+        buildFunctionParams={(token, amount, chainId, userAddress) => {
+          const decimals = TOKEN_METADATA[token].decimals;
+          const amountWei = parseUnits(amount, decimals);
+          const tokenAddress = TOKEN_CONTRACT_ADDRESSES[token][chainId];
+          return {
+            functionParams: [tokenAddress, amountWei, userAddress, 0],
+          };
+        }}
+        prefill={{ toChainId: 421614, token: 'USDC' }}
+      >
+        {({ onClick, isLoading, disabled }) => (
+          <button
+            onClick={onClick}
+            disabled={isLoading || disabled}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+          >
+            {isLoading ? 'Processing…' : 'Bridge & Supply to Aave'}
+          </button>
+        )}
       </BridgeAndExecuteButton>
     </div>
   );
-}	
+}

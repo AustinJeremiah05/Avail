@@ -15,30 +15,32 @@ export function WalletBridge() {
         try {
           setIsInitializing(true);
           console.log('Getting wallet provider...');
-          const provider = await connector.getProvider() as any;
+          
+          // Get provider - double cast through unknown to satisfy TypeScript
+          const rawProvider = await connector.getProvider();
+          const provider = rawProvider as unknown;
           console.log('Provider obtained:', provider);
-          
-         
+
           console.log('Setting provider...');
-          setProvider(provider);
-          
-         
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          setProvider(provider as any);
+
+          // Small delay to ensure provider is set
           await new Promise(resolve => setTimeout(resolve, 100));
-        
+
           console.log('Initializing SDK...');
-          await initializeSdk(provider);
-          
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          await initializeSdk(provider as any);
+
           console.log('Nexus SDK initialized successfully');
         } catch (error) {
           console.error('Failed to initialize Nexus SDK:', error);
-          if (error && typeof error === 'object') {
+          if (error instanceof Error) {
             console.error('Error details:', {
-              message: (error as { message?: string }).message,
-              stack: (error as { stack?: string }).stack,
-              name: (error as { name?: string }).name
+              message: error.message,
+              stack: error.stack,
+              name: error.name
             });
-          } else {
-            console.error('Error details:', error);
           }
         } finally {
           setIsInitializing(false);
@@ -47,7 +49,7 @@ export function WalletBridge() {
     };
 
     initializeNexus();
-  }, [isConnected, connector, isSdkInitialized, setProvider, initializeSdk]);
+  }, [isConnected, connector, isSdkInitialized, setProvider, initializeSdk, isInitializing]);
 
   if (isInitializing) {
     return (
